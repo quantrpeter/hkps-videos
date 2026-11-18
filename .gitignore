@@ -4,4 +4,4 @@ out/
 __pycache__/
 *.pyc
 .DS_Store
-voices/yue.wav
+**/voices/yue.wav
