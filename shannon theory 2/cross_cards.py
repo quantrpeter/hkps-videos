@@ -48,7 +48,7 @@ class ZipCard(Anim):
     """gzip(A + a bit of B) against gzip(A): the extra length is what B costs under A's patterns.
     Then two pairs: a close language adds little, a distant one adds a lot."""
 
-    def __init__(self, heading: str, docs_at=None, both_at=None, diff_at=None, pairs_at=None):
+    def __init__(self, heading: str, docs_at=None, both_at=None, diff_at=None, pairs_at=False):
         super().__init__(heading)
         for n, at in (("docs", docs_at), ("both", both_at), ("diff", diff_at), ("pairs", pairs_at)):
             self.mark(n, at)
@@ -117,7 +117,7 @@ class CrossCard(Anim):
     the waste (KL). states: (at, p, q). value: "cross", "kl" or "both"."""
 
     def __init__(self, heading: str, states: list[tuple], labels: list[str] | None = None, strip_at=None,
-                 blocks_at=None, value_at=None, ref_at=None, formula: str | None = "H(p, q) = Σ p_i × (-log_2 q_i)",
+                 blocks_at=None, value_at=False, ref_at=False, formula: str | None = "H(p, q) = Σ p_i × (-log_2 q_i)",
                  formula_at=None, value: str = "cross", digits: int = 2, show_nums: bool = True):
         super().__init__(heading)
         self.states = states
@@ -164,7 +164,7 @@ class CrossCard(Anim):
                 if w > 70:
                     ld.text((x + w / 2, self.yb + 37), lab, font=font(34, "bold"), fill=(255, 255, 255, int(255 * gs)),
                             anchor="mm")
-                if self.show_nums and w > 70:
+                if self.show_nums and w > 110:
                     ld.text((x + w / 2, self.yb + 92), f"p = {pi:.0%}" if pi >= 0.1 else f"p = {pi:.1%}",
                             font=font(28, "medium"), fill=NAVY + (int(255 * gs),), anchor="mm")
             if gb > 0:
@@ -196,7 +196,7 @@ class CurveCard(Anim):
     """Cross-entropy of (q, 1−q) against (p, 1−p) as a function of q, for p gliding between key
     values; the minimum sits at q = p, and `trace` draws the path of the minimum: H(p)."""
 
-    def __init__(self, heading: str, p_keys: list[tuple], curve_at=None, min_at=None, eq_at=None, trace_at=None):
+    def __init__(self, heading: str, p_keys: list[tuple], curve_at=None, min_at=False, eq_at=False, trace_at=False):
         super().__init__(heading)
         self.p_keys = p_keys
         for i, (at, _) in enumerate(p_keys):
@@ -204,7 +204,7 @@ class CurveCard(Anim):
         for n, at in (("curve", curve_at), ("min", min_at), ("eq", eq_at), ("trace", trace_at)):
             self.mark(n, at)
         self.ax0, self.ax1, self.ay0, self.ay1, self.ymax = 250, 1080, 830, 300, 4.0
-        self.add(math_img("H(p, q) = -p log_2 q - (1-p) log_2 (1-q)", 40, BLUE, "bold"), MARGIN, 236, None)
+        self.add(math_img("H(p, q) = -p log_2 q - (1-p) log_2 (1-q)", 34, BLUE, "bold"), 1200, 700, None)
 
     def X(self, v):
         return self.ax0 + v * (self.ax1 - self.ax0)
@@ -379,7 +379,7 @@ class TokenCard(Anim):
     """Training text token by token: under each, the probability the model gave the true token
     (pie); above, its −log₂ (the surprise). The average is the loss."""
 
-    def __init__(self, heading: str, tokens: list[str], probs: list[float], start, end, avg_at=None, note: str = "示意數字"):
+    def __init__(self, heading: str, tokens: list[str], probs: list[float], start, end, avg_at=False, note: str = "示意數字"):
         super().__init__(heading)
         self.tokens, self.probs = tokens, probs
         for n, at in (("start", start), ("end", end), ("avg", avg_at)):
@@ -500,7 +500,7 @@ class NameCard(Anim):
     probabilities q per name (right), and the live average loss Σ p·(−log₂ q)."""
 
     def __init__(self, heading: str, names: list[tuple[str, int]], q_keys: list[tuple], data_at=None, p_at=None,
-                 q_at=None, loss_at=None, formula: tuple | None = None):
+                 q_at=None, loss_at=False, formula: tuple | None = None):
         super().__init__(heading)
         self.names = names
         total = sum(c for _, c in names)

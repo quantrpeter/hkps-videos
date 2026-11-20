@@ -127,9 +127,9 @@ class Anim(Card):
 
     def prepare_extra(self, timing):
         self.timing = timing
-        self.T = {k: timing.at(v) for k, v in self._marks.items()}
+        self.T = {k: (math.inf if v is False else timing.at(v)) for k, v in self._marks.items()}   # False: never
         self.setup(timing)
-        return max([0.0, *[v for v in self.T.values() if v is not None]]) + self.tail
+        return max([0.0, *[v for v in self.T.values() if v is not None and v != math.inf]]) + self.tail
 
     def setup(self, timing) -> None:
         pass
